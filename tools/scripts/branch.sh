@@ -20,7 +20,7 @@ NEW_BRANCH=$1
 check_branch=`git branch | grep -w ${NEW_BRANCH}`
 if [ ${#check_branch} -ne 0 ]
 then 
-    echo "Error: ${NEW_BRANCH} exists. Cannot create new branch."
+    echo "[Error] ${NEW_BRANCH} exists. Cannot create new branch."
     exit -1
 fi 
 
@@ -36,10 +36,10 @@ cd ${GAMEDATA_PAR_DIR}
 if [ ! -d ${GAMEDATA_DIR} ]
 then
     # 查找SVN URL
-    if [ ${GIT_ORIGIN_URL} == 'main' ]
+    if [ ${GIT_ORIGIN_URL} == 'origin/main' ]
     then 
         GAMEDATA_URL='svn://svnbucket.com/gongqk/svnlibs/trunk/'
-    elif [ ${GIT_ORIGIN_URL} == 'dev0.3' ]
+    elif [ ${GIT_ORIGIN_URL} == 'origin/dev0.3' ]
     then 
         GAMEDATA_URL='svn://svnbucket.com/gongqk/svnlibs/branches/0.3dev/'
     fi

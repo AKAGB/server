@@ -14,10 +14,14 @@ fi
 function find_origin()
 {
     ori=`git branch -vv | grep $1 | grep '\[origin'`
-    ori=${ori#*[origin/}
-    ori=${ori%]*}
-    echo ${ori}
-    return $?
+    if [ ${#ori} -eq 0 ]
+    then 
+        return 1
+    else 
+        git rev-parse --abbrev-ref $1@{upstream}
+        # echo ${ori}
+        return $?
+    fi
 }
 
 function find_parent()
@@ -43,7 +47,7 @@ ori=$(find_origin ${BRANCH_NAME})
 # par=$(find_parent ${BRANCH_NAME})
 # echo ${par}
 
-while [ ${#ori} -eq 0 ]
+while [ $? -ne 0 ]
 do 
     # 如果没有远程分支，说明是本地分支，则查reflog该分支是从哪条分支分出来的
     # echo ${BRANCH_NAME}
