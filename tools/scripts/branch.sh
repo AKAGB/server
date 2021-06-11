@@ -2,8 +2,8 @@
 
 # 创建分支逻辑：
 # 1. 检查当前分支是否存在，存在则不进行创建，直接退出，否则执行2。
-# 2. 检查是否有GameData目录，如果没有先拉取当前分支对应的GameData（先进行一步查找），然后执行3，否则失败.
-# 3. git创建新的分支，如果失败则退出。
+# 2. 检查是否有GameData目录，如果没有先拉取当前分支对应的GameData。否则执行3
+# 3. 如果存在则git checkout -b，然后切回当前分支并且执行一次checkout.sh，来确保可以合理切换分支。
 
 
 if [ $# -lt 1 ]
@@ -52,9 +52,26 @@ then
         echo "[Error] Cannot checkout GameData."
         exit -1
     fi
+else 
+    git checkout -b ${NEW_BRANCH}
+    if [ $? -ne 0 ]
+    then 
+        # 第一次checkout就失败，可能是因为Git修改有冲突
+        echo "[Error] Cannot create new branch."
+        exit -1
+    fi
+    # 必须要创建分支后切过去再切回来一次，确保reflog日志中有记录，否则递归查找会陷入死循环
+    git checkout ${CUR_BRANCH}
+    ./tools/scripts/checkout.sh ${NEW_BRANCH}
+    if [ $? -ne 0 ]
+    then 
+        echo "[Error] Cannot create new branch."
+        git branch -D ${NEW_BRANCH}
+        exit -1
+    fi 
 fi
 
-git checkout -b ${NEW_BRANCH}
+# git checkout -b ${NEW_BRANCH}
 
 if [ $? -ne 0 ]
 then 

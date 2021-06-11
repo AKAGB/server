@@ -22,7 +22,7 @@ BRANCH_NAME=$1
 check_branch=`git branch | grep -w ${BRANCH_NAME}`
 if [ ${#check_branch} -eq 0 ]
 then 
-    echo "Error: ${BRANCH_NAME} does not exist."
+    echo "[Error] ${BRANCH_NAME} does not exist."
     exit -1
 fi 
 
