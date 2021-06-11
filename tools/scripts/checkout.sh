@@ -55,12 +55,17 @@ then
         exit -1
     fi
 else 
-    # 4. 检查GameData分支以及Git分支是否发生修改
+    # 4. 检查svn分支以及Git分支是否发生修改
     svn_change=`cd ${GAMEDATA_DIR} && svn status`
     if [ ${#svn_change} -ne 0 ]
     then 
-        echo "Error: GameData发生修改，请先处理完成再切换分支"
+        echo "Error: GameData发生修改且未提交，请先处理完成再切换分支。"
         exit -1
     fi
-    
+    git_change=`git status -s`
+    if [ ${#git_change} -ne 0 ]
+    then
+        echo "Error: 存在修改且尚未提交的内容，请先处理完成再切换分支。"
+        exit -1
+    fi 
 fi
