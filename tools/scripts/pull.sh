@@ -18,13 +18,21 @@ else
     echo "[Error] 当前分支未绑定远程分支"
     exit -1
 fi 
-echo $GIT_ORIGIN_URL
-exit 0
+
+# 查找SVN URL
+if [ ${GIT_ORIGIN_URL} == 'origin/main' ]
+then 
+    GAMEDATA_URL='svn://svnbucket.com/gongqk/svnlibs/trunk/'
+elif [ ${GIT_ORIGIN_URL} == 'origin/dev0.3' ]
+then 
+    GAMEDATA_URL='svn://svnbucket.com/gongqk/svnlibs/branches/0.3dev/'
+fi
+# echo ${GIT_ORIGIN_URL}
+echo "SVN URL: " ${GAMEDATA_URL}
 
 # echo `pwd`
 GAMEDATA_PAR_DIR="../.."
 GAMEDATA_DIR="./svnlibs"
-GAMEDATA_URL="svn://svnbucket.com/gongqk/svnlibs/"
 
 cd ${GAMEDATA_PAR_DIR}
 
