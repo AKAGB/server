@@ -61,8 +61,8 @@ else
         exit -1
     fi
     # 必须要创建分支后切过去再切回来一次，确保reflog日志中有记录，否则递归查找会陷入死循环
-    git checkout ${CUR_BRANCH}
-    ./tools/scripts/checkout.sh ${NEW_BRANCH}
+    git checkout ${CUR_BRANCH} >> /dev/null
+    ./tools/scripts/checkout.sh ${NEW_BRANCH}  
     if [ $? -ne 0 ]
     then 
         echo "[Error] Cannot create new branch."
